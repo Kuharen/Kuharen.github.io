@@ -1,32 +1,45 @@
 
 body {
+  font-family: sans-serif;
   background: #111;
   color: #fff;
-  font-family: sans-serif;
-  padding: 10px;
+  margin: 0;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
 }
 input, select, button {
   margin: 5px;
-  padding: 5px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+}
+input {
+  width: 200px;
+}
+button {
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+}
+button.active {
+  background: red;
 }
 .catalog {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
+  margin-top: 20px;
 }
 .card {
   background: #222;
   padding: 10px;
-  width: 200px;
-  border-radius: 10px;
-}
-button.active {
-  background: red;
-  color: white;
+  border-radius: 6px;
 }
 .cart {
-  margin-top: 30px;
   background: #222;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 20px;
 }

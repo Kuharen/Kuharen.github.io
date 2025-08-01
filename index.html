@@ -1,44 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UrbanSole</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>URBANSOLE</h1>
-  <input type="text" id="searchInput" placeholder="Поиск..."/>
-  <div id="cart-indicator">🛒 <span id="cart-count">0</span></div>
+  <div class="container">
+    <h1>URBANSOLE</h1>
+    <input type="text" id="searchInput" placeholder="Поиск..." />
+    <div class="tabs">
+      <button class="tab-button active" data-gender="Мужские">Мужские</button>
+      <button class="tab-button" data-gender="Женские">Женские</button>
+    </div>
+    <div class="filters">
+      <select id="brandFilter"><option>Все бренды</option></select>
+      <select id="sizeFilter"><option>Все размеры</option></select>
+      <select id="priceFilter">
+        <option>Все цены</option>
+        <option>До 5000₽</option>
+        <option>5000₽ – 7000₽</option>
+        <option>Свыше 7000₽</option>
+      </select>
+    </div>
+    <div id="catalog" class="catalog"></div>
 
-  <div class="toggle-buttons">
-    <button id="menBtn" class="active">Мужские</button>
-    <button id="womenBtn">Женские</button>
+    <div class="cart">
+      <h2>Корзина</h2>
+      <div id="cartItems"></div>
+      <p><strong>Итого:</strong> <span id="totalPrice">0₽</span></p>
+      <button id="checkoutBtn">Оформить заказ</button>
+    </div>
   </div>
-
-  <div class="filters">
-    <select id="brandFilter"><option value="">Все бренды</option></select>
-    <select id="sizeFilter"><option value="">Все размеры</option></select>
-    <select id="priceFilter">
-      <option value="">Все цены</option>
-      <option value="lt5000">До 5000₽</option>
-      <option value="5000-7000">5000₽ – 7000₽</option>
-      <option value="gt7000">Свыше 7000₽</option>
-    </select>
-  </div>
-
-  <div id="catalog" class="catalog"></div>
-
-  <div id="cart" class="cart">
-    <h2>Корзина</h2>
-    <ul id="cart-items"></ul>
-    <p><strong>Итого:</strong> <span id="cart-total">0₽</span></p>
-    <button id="checkoutBtn">Оформить заказ</button>
-    <button id="closeCartBtn">×</button>
-  </div>
-
-  <script src="config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

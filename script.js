@@ -1,58 +1,54 @@
 
-async function fetchData(url) {
-  const res = await fetch(url);
-  return await res.json();
+const maleSheet = 'https://opensheet.elk.sh/13TgVvLI8Dnfhn40fD_sQarLVuSsMd5_-oma2mgg5Ylc/Лист1';
+const femaleSheet = 'https://opensheet.elk.sh/12SCGsWfpTbkKt5htyrPfdUi7hbvK2I7anSvvNs_qy3k/Лист1';
+
+let currentGender = 'Мужские';
+let products = [];
+
+document.querySelectorAll(".tab-button").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    currentGender = button.dataset.gender;
+    loadData();
+  });
+});
+
+function loadData() {
+  const url = currentGender === 'Мужские' ? maleSheet : femaleSheet;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      products = data;
+      renderCatalog(data);
+    });
 }
 
 function renderCatalog(data) {
-  const catalog = document.getElementById("catalog");
-  if (!catalog) return;
-  catalog.innerHTML = "";
+  const container = document.getElementById("catalog");
+  container.innerHTML = "";
   data.forEach(item => {
     const div = document.createElement("div");
     div.className = "card";
-    div.innerHTML = \`
-      <strong>\${item["Название"]}</strong><br>
-      Размеры: \${item["Размеры"]}<br>
-      <span style="color:red">\${item["Цена"]}₽</span><br>
-      <button onclick="addToCart('\${item["Название"]}', \${item["Цена"]})">Заказать</button>
-    \`;
-    catalog.appendChild(div);
+    div.innerHTML = `
+      <img src="${item.Фото || 'default.jpg'}" width="100%" />
+      <h3>${item.Бренд || 'Без бренда'}</h3>
+      <p>${item.Название || ''}</p>
+      <p>${item.Цена}₽</p>
+      <button onclick="addToCart('${item.Название}', ${item.Цена})">В корзину</button>
+    `;
+    container.appendChild(div);
   });
 }
-
-let currentData = [];
-let cart = [];
 
 function addToCart(name, price) {
-  cart.push({ name, price: parseInt(price) });
-  updateCart();
+  const container = document.getElementById("cartItems");
+  const div = document.createElement("div");
+  div.textContent = `${name} — ${price}₽`;
+  container.appendChild(div);
+  const total = document.getElementById("totalPrice");
+  const sum = parseInt(total.textContent) + parseInt(price);
+  total.textContent = sum + "₽";
 }
 
-function updateCart() {
-  document.getElementById("cart-count").innerText = cart.length;
-  const ul = document.getElementById("cart-items");
-  const total = document.getElementById("cart-total");
-  ul.innerHTML = "";
-  let sum = 0;
-  cart.forEach(item => {
-    const li = document.createElement("li");
-    li.innerText = \`\${item.name} — \${item.price}₽\`;
-    ul.appendChild(li);
-    sum += item.price;
-  });
-  total.innerText = sum + "₽";
-}
-
-async function loadCatalog(url) {
-  const data = await fetchData(url);
-  currentData = data;
-  renderCatalog(data);
-}
-
-document.getElementById("menBtn").onclick = () => loadCatalog(CONFIG.mens);
-document.getElementById("womenBtn").onclick = () => loadCatalog(CONFIG.womens);
-document.getElementById("closeCartBtn").onclick = () => document.getElementById("cart").style.display = 'none';
-document.getElementById("checkoutBtn").onclick = () => alert("Спасибо за заказ!");
-
-loadCatalog(CONFIG.mens);
+loadData();
