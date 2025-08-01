@@ -1,1 +1,32 @@
-body { background: #111; color: white; font-family: sans-serif; }
+
+body {
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+  padding: 10px;
+}
+input, select, button {
+  margin: 5px;
+  padding: 5px;
+}
+.catalog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.card {
+  background: #222;
+  padding: 10px;
+  width: 200px;
+  border-radius: 10px;
+}
+button.active {
+  background: red;
+  color: white;
+}
+.cart {
+  margin-top: 30px;
+  background: #222;
+  padding: 10px;
+  border-radius: 10px;
+}
