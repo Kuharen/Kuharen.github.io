@@ -1,62 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>URBANSOLE | Каталог</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { background: #111; color: #fff; font-family: sans-serif; margin: 0; padding: 0; text-align: center; }
-    header { background: #1a1a1a; padding: 20px; font-size: 2rem; color: #ff4747; }
-    nav { margin: 20px; }
-    button { padding: 10px 20px; margin: 5px; background: #333; color: #fff; border: none; border-radius: 20px; cursor: pointer; }
-    button.active, button:hover { background: #ff4747; }
-    .catalog { display: flex; flex-wrap: wrap; justify-content: center; padding: 10px; }
-    .card { background: #222; margin: 10px; padding: 15px; border-radius: 10px; width: 250px; box-shadow: 0 0 10px #000; }
-    .card img { width: 100%; border-radius: 10px; }
-    .card h3 { margin: 10px 0 5px; }
-    .card p { margin: 0 0 5px; font-size: 0.9rem; color: #ccc; }
-    .card .price { color: #ff4747; font-weight: bold; margin: 10px 0; }
-    .card a { display: inline-block; background: #ff4747; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; }
-  </style>
+  <title>URBANSOLE | Каталог</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>URBANSOLE</header>
-  <nav>
-    <button onclick="loadData('men')" class="active">Мужские</button>
-    <button onclick="loadData('women')">Женские</button>
-  </nav>
-  <section class="catalog" id="catalog">Загрузка...</section>
+  <h1>URBANSOLE</h1>
+  <div class="buttons">
+    <button id="menBtn" class="active">Мужские</button>
+    <button id="womenBtn">Женские</button>
+  </div>
 
-  <script>
-    const sheets = {
-      men: '12SCGsWfpTbkKt5htyrPfdUi7hbvK2I7anSvvNs_qy3k',
-      women: '13TgVvLI8Dnfhn40fD_sQarLVuSsMd5_-oma2mgg5Ylc'
-    };
+  <div id="catalog" class="catalog"></div>
 
-    async function loadData(category) {
-      document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-
-      const url = `https://opensheet.elk.sh/${sheets[category]}/1`;
-      const res = await fetch(url);
-      const data = await res.json();
-      const catalog = document.getElementById('catalog');
-      catalog.innerHTML = '';
-
-      data.forEach(item => {
-        catalog.innerHTML += `
-          <div class="card">
-            <img src="${item['Фото']}" alt="sneaker">
-            <h3>${item['Название']}</h3>
-            <p>Размеры: ${item['Размеры']}</p>
-            <div class="price">${item['Цена']} ₽</div>
-            <a href="https://t.me/your_bot_or_channel" target="_blank">Заказать</a>
-          </div>
-        `;
-      });
-    }
-
-    loadData('men');
-  </script>
+  <script type="module" src="config.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
