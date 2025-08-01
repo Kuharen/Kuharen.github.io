@@ -2,37 +2,26 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UrbanSole</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>URBANSOLE</h1>
-    <input type="text" id="searchInput" placeholder="Поиск..." />
-    <div class="tabs">
-      <button class="tab-button active" data-gender="Мужские">Мужские</button>
-      <button class="tab-button" data-gender="Женские">Женские</button>
-    </div>
-    <div class="filters">
-      <select id="brandFilter"><option>Все бренды</option></select>
-      <select id="sizeFilter"><option>Все размеры</option></select>
-      <select id="priceFilter">
-        <option>Все цены</option>
-        <option>До 5000₽</option>
-        <option>5000₽ – 7000₽</option>
-        <option>Свыше 7000₽</option>
-      </select>
-    </div>
-    <div id="catalog" class="catalog"></div>
+  <h1>URBANSOLE</h1>
 
-    <div class="cart">
-      <h2>Корзина</h2>
-      <div id="cartItems"></div>
-      <p><strong>Итого:</strong> <span id="totalPrice">0₽</span></p>
-      <button id="checkoutBtn">Оформить заказ</button>
-    </div>
+  <div class="gender-switch">
+    <button id="menBtn" class="active">Мужские</button>
+    <button id="womenBtn">Женские</button>
   </div>
-  <script src="script.js"></script>
+
+  <div id="product-list" class="product-list"></div>
+
+  <!-- Модальное окно -->
+  <div id="modal" class="modal">
+    <div class="modal-content" id="modal-body"></div>
+    <span id="modal-close" class="close">&times;</span>
+  </div>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>

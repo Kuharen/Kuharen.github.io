@@ -1,54 +1,80 @@
+import { SHEET_URLS } from './config.js';
 
-const maleSheet = 'https://opensheet.elk.sh/13TgVvLI8Dnfhn40fD_sQarLVuSsMd5_-oma2mgg5Ylc/Лист1';
-const femaleSheet = 'https://opensheet.elk.sh/12SCGsWfpTbkKt5htyrPfdUi7hbvK2I7anSvvNs_qy3k/Лист1';
+const productList = document.getElementById("product-list");
+const modal = document.getElementById("modal");
+const modalBody = document.getElementById("modal-body");
+const modalClose = document.getElementById("modal-close");
 
-let currentGender = 'Мужские';
-let products = [];
+let currentGender = "men";
 
-document.querySelectorAll(".tab-button").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
-    button.classList.add("active");
-    currentGender = button.dataset.gender;
-    loadData();
+async function fetchData(gender) {
+  const url = SHEET_URLS[gender];
+  try {
+    const res = await fetch(url);
+    return await res.json();
+  } catch (err) {
+    console.error("Ошибка загрузки данных:", err);
+    return [];
+  }
+}
+
+function renderProducts(products) {
+  productList.innerHTML = "";
+  products.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${getImageUrl(item['Фото']) || 'default.jpg'}" alt="sneaker" />
+      <h3>${item["Название"]}</h3>
+      <p><strong>Размеры:</strong> ${item["Размеры"]}</p>
+      <p class="price">${item["Цена"] || "—"}</p>
+      <button class="order-btn">Заказать</button>
+    `;
+    card.addEventListener("click", () => openModal(item));
+    productList.appendChild(card);
   });
+}
+
+function openModal(item) {
+  modalBody.innerHTML = `
+    <img src="${getImageUrl(item['Фото']) || 'default.jpg'}" alt="sneaker" />
+    <h2>${item["Название"]}</h2>
+    <p><strong>Артикул:</strong> ${item["артикул"] || "—"}</p>
+    <p><strong>Бренд:</strong> ${item["Бренд"] || "—"}</p>
+    <p><strong>Размеры:</strong> ${item["Размеры"] || "—"}</p>
+    <p><strong>Цена:</strong> ${item["Цена"] || "—"}</p>
+  `;
+  modal.style.display = "block";
+}
+modalClose.onclick = () => (modal.style.display = "none");
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+};
+
+document.getElementById("menBtn").addEventListener("click", () => {
+  currentGender = "men";
+  toggleGenderButtons();
+  loadProducts();
+});
+document.getElementById("womenBtn").addEventListener("click", () => {
+  currentGender = "women";
+  toggleGenderButtons();
+  loadProducts();
 });
 
-function loadData() {
-  const url = currentGender === 'Мужские' ? maleSheet : femaleSheet;
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      products = data;
-      renderCatalog(data);
-    });
+function toggleGenderButtons() {
+  document.getElementById("menBtn").classList.toggle("active", currentGender === "men");
+  document.getElementById("womenBtn").classList.toggle("active", currentGender === "women");
 }
 
-function renderCatalog(data) {
-  const container = document.getElementById("catalog");
-  container.innerHTML = "";
-  data.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <img src="${item.Фото || 'default.jpg'}" width="100%" />
-      <h3>${item.Бренд || 'Без бренда'}</h3>
-      <p>${item.Название || ''}</p>
-      <p>${item.Цена}₽</p>
-      <button onclick="addToCart('${item.Название}', ${item.Цена})">В корзину</button>
-    `;
-    container.appendChild(div);
-  });
+function getImageUrl(rawUrl) {
+  const match = rawUrl?.match(/\/d\/([\w-]+)/);
+  return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : rawUrl;
 }
 
-function addToCart(name, price) {
-  const container = document.getElementById("cartItems");
-  const div = document.createElement("div");
-  div.textContent = `${name} — ${price}₽`;
-  container.appendChild(div);
-  const total = document.getElementById("totalPrice");
-  const sum = parseInt(total.textContent) + parseInt(price);
-  total.textContent = sum + "₽";
+async function loadProducts() {
+  const data = await fetchData(currentGender);
+  renderProducts(data);
 }
 
-loadData();
+loadProducts();
